@@ -189,13 +189,13 @@ function cartTotalQuantity() {
 
    //  formulaire
   //--------------------------------------------------------------
+
   // les données du client seront stockées dans ce tableau pour la commande sur page panier
+
   if (page.match("cart")) {
     var contactClient = {};
     localStorage.contactClient = JSON.stringify(contactClient);
 
-    // voir https://cheatography.com/davechild/cheat-sheets/regular-expressions/
-    // on pointe des éléments input, on attribut à certains la même classe, ils régiront pareil aux différantes regex
     // on pointe les input nom prénom et ville
     var prenom = document.querySelector("#firstName");
     prenom.classList.add("regex_texte");
@@ -203,14 +203,18 @@ function cartTotalQuantity() {
     nom.classList.add("regex_texte");
     var ville = document.querySelector("#city");
     ville.classList.add("regex_texte");
+
     // on pointe l'input adresse
     var adresse = document.querySelector("#address");
     adresse.classList.add("regex_adresse");
+
     // on pointe l'input email
     var email = document.querySelector("#email");
     email.classList.add("regex_email");
+
     // on pointe les élément qui ont la classe .regex_texte
     var regexTexte = document.querySelectorAll(".regex_texte");
+    
     // modification du type de l'input type email à text à cause d'un comportement de l'espace blanc non voulu vis à vis de la regex 
     document.querySelector("#email").setAttribute("type", "text");
   }

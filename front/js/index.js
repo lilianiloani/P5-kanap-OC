@@ -1,11 +1,17 @@
-const getAllProducts=async function(){
 
+//Récupération des produits de l'api
+//-------------------------------------
+
+const getAllProducts=async function(){
+//recupération de liste des produits de l'api
     let  resp= await  fetch("http://localhost:3000/api/products");
     if(resp.ok){
         const  products= await resp.json();
+        // parcours de liste des produits récupérée  et construction du DOM
         products.forEach(element => {
             const a = document.createElement("a");
             document.getElementById("items").appendChild(a);
+            //construction du lien vers un produit
             a.href=`./product.html?id=${element._id}`;
             const article = document.createElement("article");
             a.appendChild(article);
@@ -27,6 +33,7 @@ const getAllProducts=async function(){
         })
     }
         else {
+            //gestion d'erreur
             console.error("erreur");
         }
     }
