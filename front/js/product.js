@@ -1,5 +1,6 @@
 
-
+//récupération du lien hypertexte du produit
+//------------------------------------------
 const url = new URL(window.location.href);
 
 const id = url.searchParams.get("id");
@@ -39,86 +40,82 @@ const getProduct = async function() {
         const quantity=document.getElementById('quantity');
         
     // Ajout de l'evenement sur le bouton.
+    //--------------------------------------
         const btn= document.getElementById('addToCart');
         btn.addEventListener('click', ()=>{
-        console.log("bonjour");
+        console.log("command");
 
-        let quantityValue = parseInt(quantity.value);
-        console.log("quantity " +quantityValue);
-           
-    //check du choix couleur vide 
-             if(canapeColors.value==""){
-                console.log("choisir une couleur");
-                alert("choisir une couleur");
-                return false;
+            let quantityValue = parseInt(quantity.value);
+            console.log("quantity " +quantityValue);
+            
+            //check du choix couleur vide 
+                if(canapeColors.value==""){
+                    console.log("choisir une couleur");
+                    alert("choisir une couleur");
+                    return false;
+                } 
+            //check quantité vide 
+                if(quantityValue==0){
+                    console.log("choisir nombre d'article");
+                    alert("choisir nombre d'article(s)!");
+                    return false;
+                } 
+            //construction de l'objet produit pour envoi au panier 
+                let chosenProduct = {
+                    id:id,
+                    name:product.name,
+                    image: product.imageUrl,
+                    description:product.description,
+                    colors:canapeColors.value,
+                    quantity:quantityValue,
+                    price: product.price,
+                    altTxt:product.altTxt
+                };
+                console.log(chosenProduct);
+        
+            //mise en place des données à stocker dans le localstorage 
+            //-------------------------------------------------------
+                let cart= [];
+                //localStorage.clear();
+                console.log(cart);
+                let oldItems = JSON.parse(localStorage.getItem('items')) || [];
 
-            } 
-    //check quantité vide 
-             if(quantityValue==0){
-                console.log("choisir nombre d'article");
-                alert("choisir nombre d'article(s)!");
-                return false;
+                // si le localstorage n'est pas vide
+                let oldItem = oldItems.find(el => el.id == chosenProduct.id 
+                && el.colors == chosenProduct.colors);
+                if (oldItem) {
+                    console.log(oldItem);
 
-            } 
-    //construction de l'objet produit pour envoi au panier 
-             let chosenProduct = {
-                id:id,
-                name:product.name,
-                image: product.imageUrl,
-                description:product.description,
-                colors:canapeColors.value,
-                quantity:quantityValue,
-                price: product.price,
-                altTxt:product.altTxt
-            };
-            console.log(chosenProduct);
-    
-    //mise en place des données à stocker dans le localstorage 
-//-------------------------------------------------------
-            let cart= [];
-            //localStorage.clear();
-            console.log(cart);
-            let oldItems = JSON.parse(localStorage.getItem('items')) || [];
+                // Incrémentation de la quantité si un produit identique existe dans le localstorage
+                    oldItem.quantity += quantityValue;
+                } else {
+                    oldItems.push(chosenProduct);
+                    console.log(oldItem);
+                }
+                //cart.push(chosenProduct);
+                console.log(oldItems);
+                localStorage.setItem('items', JSON.stringify(oldItems));
+                console.log("this is localStorage" +localStorage.getItem('items'));
 
-            // si le localstorage n'est pas vide
-            let oldItem = oldItems.find(el => el.id == chosenProduct.id 
-            && el.colors == chosenProduct.colors);
-            if (oldItem) {
-                console.log(oldItem);
+            btn.innerText="produit ajouté";
+            btn.style.backgroundColor="green";
+            console.log(btn);
 
-            // Incrémentation de la quantité si un produit identique existe dans le localstorage
-                oldItem.quantity += quantityValue;
-            } else {
-                oldItems.push(chosenProduct);
-                console.log(oldItem);
-  
+            function resetBtnColor(){
+                btn.style.color = "white";
+                btn.textContent = "Ajouter au panier";
+                btn.style.backgroundColor="#2c3e50";
+
             }
-
-            //cart.push(chosenProduct);
-            console.log(oldItems);
-            localStorage.setItem('items', JSON.stringify(oldItems));
-            console.log("this is localStorage" +localStorage.getItem('items'));
-
-        btn.innerText="produit ajouté";
-        btn.style.backgroundColor="green"; 
-        console.log(btn);
-
-        function resetBtnColor(){
-            btn.style.color = "white";
-            btn.textContent = "Ajouter au panier";
-            btn.style.backgroundColor="#2c3e50";
-
-        }
-
-        canapeColors.addEventListener("change", ()=>{
-           resetBtnColor();
-           
-            });
-
-        quantity.addEventListener("change", ()=>{
+            canapeColors.addEventListener("change", ()=>{
             resetBtnColor();
+            
+                });
 
-        });
+            quantity.addEventListener("change", ()=>{
+                resetBtnColor();
+
+            });
     
         });   
 

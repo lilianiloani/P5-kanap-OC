@@ -11,6 +11,7 @@ const getAllProducts=async function(){
         products.forEach(element => {
             const a = document.createElement("a");
             document.getElementById("items").appendChild(a);
+            
             //construction du lien vers un produit
             a.href=`./product.html?id=${element._id}`;
             const article = document.createElement("article");
