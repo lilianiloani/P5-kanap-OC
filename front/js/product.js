@@ -43,11 +43,8 @@ const getProduct = async function() {
     //--------------------------------------
         const btn= document.getElementById('addToCart');
         btn.addEventListener('click', ()=>{
-        console.log("command");
-
             let quantityValue = parseInt(quantity.value);
-            console.log("quantity " +quantityValue);
-            
+        
             //check du choix couleur vide 
                 if(canapeColors.value==""){
                     console.log("choisir une couleur");
@@ -71,12 +68,10 @@ const getProduct = async function() {
                     price: product.price,
                     altTxt:product.altTxt
                 };
-                console.log(chosenProduct);
-        
+                
             //mise en place des données à stocker dans le localstorage 
             //-------------------------------------------------------
                 let cart= [];
-                //localStorage.clear();
                 console.log(cart);
                 let oldItems = JSON.parse(localStorage.getItem('items')) || [];
 
@@ -84,23 +79,20 @@ const getProduct = async function() {
                 let oldItem = oldItems.find(el => el.id == chosenProduct.id 
                 && el.colors == chosenProduct.colors);
                 if (oldItem) {
-                    console.log(oldItem);
 
                 // Incrémentation de la quantité si un produit identique existe dans le localstorage
-                    oldItem.quantity += quantityValue;
+                oldItem.quantity += quantityValue;
                 } else {
                     oldItems.push(chosenProduct);
-                    console.log(oldItem);
                 }
                 //cart.push(chosenProduct);
-                console.log(oldItems);
                 localStorage.setItem('items', JSON.stringify(oldItems));
-                console.log("this is localStorage" +localStorage.getItem('items'));
-
+               
+            //  changement du bouton "ajouter au panier" en "produit ajouté"
             btn.innerText="produit ajouté";
             btn.style.backgroundColor="green";
-            console.log(btn);
 
+            //fonction de réinitialisation des couleurs
             function resetBtnColor(){
                 btn.style.color = "white";
                 btn.textContent = "Ajouter au panier";
@@ -108,15 +100,13 @@ const getProduct = async function() {
 
             }
             canapeColors.addEventListener("change", ()=>{
-            resetBtnColor();
-            
-                });
+                resetBtnColor();
+            });
 
             quantity.addEventListener("change", ()=>{
                 resetBtnColor();
 
             });
-    
         });   
 
     }

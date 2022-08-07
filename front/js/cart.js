@@ -22,11 +22,7 @@ function showCart() {
 
       //calculer le prix total de l'article
       itemTotalPrice=item.price*item.quantity;
-      console.log(itemTotalPrice);
-      console.log(totalQuantity+" "+totalPrice);
-      
       totalPrice+=itemTotalPrice;
-      console.log(totalPrice);
 
       //Article  
       const cartArticle = document.createElement('article');
@@ -101,7 +97,7 @@ function showCart() {
 
       document.getElementById('totalPrice').innerText=totalPrice;
 
-      //calculer la quantité totale et le prix total
+      //calculer la quantité et le prix
       inputQuantity.addEventListener('change',()=>{
         console.log(totalQuantity);
         item.quantity=inputQuantity.value;
@@ -126,12 +122,8 @@ function showCart() {
 
       itemDelete.addEventListener('click',()=>{
         const cartPreviousLength= cart.length;
-        console.log("previous length....."+cartPreviousLength)
               
         updatedCart= [...cart.filter(elt=>elt.id+elt.colors!==item.id+item.colors)];
-        console.log(updatedCart);
-        console.log("updated length....."+updatedCart.length)
-
         if (updatedCart.length < cartPreviousLength) {
             localStorage.setItem("items", JSON.stringify(updatedCart));
             cartParent.removeChild(cartArticle); //permet de faire la mise a jour sans rafraichir la page - single page
@@ -140,8 +132,10 @@ function showCart() {
       })
     });
   }
-}
+  
+}//showCart
 
+  //fonction pour calculer la quantité totale
   function cartTotalQuantity() {
       const itemQuantityElt = document.querySelectorAll('.itemQuantity');
       let tQuantity = 0;
@@ -151,6 +145,7 @@ function showCart() {
       })
       return totalQuantityElt.innerText = tQuantity;
   }
+  //fonction pour calculer le coût total
   function cartTotalCost() {
         const itemPriceElt = document.querySelectorAll('.itemTotalPrice');
         let itTotalPrice = 0;
@@ -159,6 +154,7 @@ function showCart() {
       })
        document.getElementById('totalPrice').innerText =  itTotalPrice;
   }
+  //fonction de mise à jour du contenu du panier
   function updateCartTotals(cartLength){
     if(cartLength > 0){
       cartTotalCost();
@@ -171,7 +167,6 @@ function showCart() {
     }
   }
 
-  
   //  formulaire
   //--------------------------------------------------------------
   //construire le DOM de formulaire 
@@ -198,13 +193,11 @@ function showCart() {
     if (regexNames.test(e.target.value) == false) {
       document.getElementById('firstNameErrorMsg').innerHTML= "format incorrect";
       inputFirstName.style.backgroundColor = "red";
-      console.log(e.target.value);
       } else { document.getElementById('firstNameErrorMsg').innerHTML = "";
         inputFirstName.style.backgroundColor = "green";
       } 
       if(e.target.value == "" ) {
         inputFirstName.style.backgroundColor = "white";
-        console.log('champ vide');
         document.getElementById('firstNameErrorMsg').innerHTML = "champ vide"; 
       }
   });
@@ -217,7 +210,6 @@ function showCart() {
       }
       if(e.target.value == "" ) {
         inputLastName.style.backgroundColor = "white";
-        console.log('champ vide');
         document.getElementById('lastNameErrorMsg').innerHTML = "champ vide"; 
       }
   });
@@ -230,7 +222,6 @@ function showCart() {
       }
       if(e.target.value == "" ) {
         inputAddress.style.backgroundColor = "white";
-        console.log('champs vide');
         document.getElementById('addressErrorMsg').innerHTML = "champ vide"; 
       }
   });
@@ -239,51 +230,47 @@ function showCart() {
       document.getElementById('cityErrorMsg').innerHTML = "format incorrect";
       inputCity.style.backgroundColor = "red";
       } else { document.getElementById('cityErrorMsg').innerHTML = "" ;
-          inputCity.style.backgroundColor = "green";
+        inputCity.style.backgroundColor = "green";
       }
       if(e.target.value == "" ) {
         inputCity.style.backgroundColor = "white";
-        console.log('champs vide');
         document.getElementById('cityErrorMsg').innerHTML = "champ vide"; 
       }
   });
   inputEmail.addEventListener("input", (e) => {
     if (regexMail.test(e.target.value) == false) {
-        document.getElementById('emailErrorMsg').innerHTML = "Forme email pas encore conforme";
-           
+        document.getElementById('emailErrorMsg').innerHTML = "Forme email pas encore conforme"; 
       } else { document.getElementById('emailErrorMsg').innerHTML = "";
         inputEmail.style.backgroundColor = "green";
       }
       if(e.target.value == "" ) {
         inputEmail.style.backgroundColor = "white";
-        console.log('champs vide');
         document.getElementById('emailErrorMsg').innerHTML = "Veuillez renseigner votre email."; 
       }
   });
-    
+
   // Evenement de validation/d'accés au clic du bouton du formulaire
   //--------------------------------------------------------------
   submitBtn.addEventListener("click", (e) => {
     e.preventDefault() //empeche le refresh de la page quand on clique
 
     const contact = { 
-      firstName: inputFirstName.value,
-      lastName: inputLastName.value,
-      address: inputAddress.value,
-      city: inputCity.value,
-      email: inputEmail.value,
-      };
-      //test si un champ est vide, ne pas générer de commande
-      if (inputFirstName.value == "" || inputLastName.value == "" ||
-        inputAddress.value == "" || inputCity.value == "" || inputEmail.value == "") {
-          alert("Champ(s) manquant(s)");
-          return false;
-        };
-    
-      if (regexAddress.test(contact.address) == false || regexMail.test(contact.email) == false || regexCity.test(contact.city) == false || regexNames.test(contact.firstName || regexNames.test(contact.lastName) == false) == false) {
-          alert("Merci de remplir correctement le formulaire pour valider votre commande");
-          return false;
-        };
+    firstName: inputFirstName.value,
+    lastName: inputLastName.value,
+    address: inputAddress.value,
+    city: inputCity.value,
+    email: inputEmail.value,
+    };
+    //test si un champ est vide, ne pas générer de commande
+    if (inputFirstName.value == "" || inputLastName.value == "" ||
+    inputAddress.value == "" || inputCity.value == "" || inputEmail.value == "") {
+      alert("Champ(s) manquant(s)");
+      return false;
+    };
+    if (regexAddress.test(contact.address) == false || regexMail.test(contact.email) == false || regexCity.test(contact.city) == false || regexNames.test(contact.firstName || regexNames.test(contact.lastName) == false) == false) {
+      alert("Merci de remplir correctement le formulaire pour valider votre commande");
+      return false;
+    };
 
     // Envoi de la commande
    //----------------------------------------------------------------
@@ -293,7 +280,6 @@ function showCart() {
     cart.forEach(item => {
     products.push(item.id);
     });
-    console.log(products);
 
     // le paquet que l'on veut envoyer
     const orderData = { contact, products }; 
@@ -310,7 +296,6 @@ function showCart() {
     .then((commande) => {
       window.location.href = `confirmation.html?orderId=${commande.orderId}`; //redirige vers la page confirmation de commande
     })
-    
     .catch((error) => {
       alert(error);
       });
