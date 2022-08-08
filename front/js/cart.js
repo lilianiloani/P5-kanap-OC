@@ -1,5 +1,4 @@
 
-
 //initialisation des totaux de quantité et prix 
 let totalPrice=0;
 let totalQuantity=0;
@@ -111,26 +110,29 @@ function showCart() {
       })
       
       // construire supprimer 
-      const cartDelete = document.createElement("div");
-      cartItemSettingDiv.appendChild(cartDelete);
-      cartDelete.className = "cart__item__content__settings__delete";
+      const cartDeleteDiv = document.createElement("div");
+      cartItemSettingDiv.appendChild(cartDeleteDiv);
+      cartDeleteDiv.className = "cart__item__content__settings__delete";
 
-      let itemDelete = document.createElement('p');
-      cartDelete.appendChild(itemDelete);
-      itemDelete.className = "deleteItem";
-      itemDelete.append('Supprimer');
+      let itemDeleteP = document.createElement('p');
+      cartDeleteDiv.appendChild(itemDeleteP);
+      itemDeleteP.className = "deleteItem";
+      itemDeleteP.append('Supprimer');
 
-      itemDelete.addEventListener('click',()=>{
+       itemDeleteP.addEventListener('click',()=>{
         const cartPreviousLength= cart.length;
-              
+        cart=JSON.parse(localStorage.getItem('items'));
+         
         updatedCart= [...cart.filter(elt=>elt.id+elt.colors!==item.id+item.colors)];
         if (updatedCart.length < cartPreviousLength) {
+          
             localStorage.setItem("items", JSON.stringify(updatedCart));
             cartParent.removeChild(cartArticle); //permet de faire la mise a jour sans rafraichir la page - single page
             updateCartTotals(updatedCart.length)
-        }
-      })
-    });
+        } 
+      }) 
+
+    })
   }
   
 }//showCart
@@ -165,7 +167,7 @@ function showCart() {
       const cartContainer=document.querySelector('#cartAndFormContainer');
       cartContainer.innerHTML="<h1> Le panier est vide <h1>"
     }
-  }
+  } 
 
   //  formulaire
   //--------------------------------------------------------------
@@ -239,7 +241,7 @@ function showCart() {
   });
   inputEmail.addEventListener("input", (e) => {
     if (regexMail.test(e.target.value) == false) {
-        document.getElementById('emailErrorMsg').innerHTML = "Forme email pas encore conforme"; 
+        document.getElementById('emailErrorMsg').innerHTML = "Format email pas encore conforme"; 
       } else { document.getElementById('emailErrorMsg').innerHTML = "";
         inputEmail.style.backgroundColor = "green";
       }
@@ -249,6 +251,7 @@ function showCart() {
       }
   });
 
+  
   // Evenement de validation/d'accés au clic du bouton du formulaire
   //--------------------------------------------------------------
   submitBtn.addEventListener("click", (e) => {
