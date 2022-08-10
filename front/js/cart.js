@@ -197,7 +197,7 @@ function showCart() {
       alert("Champ(s) manquant(s)");
       return false;
     };
-    if (regexAddress.test(contact.address) == false || regexMail.test(contact.email) == false || regexCity.test(contact.city) == false || regexNames.test(contact.firstName || regexNames.test(contact.lastName) == false) == false) {
+    if (regexAddress.test(contact.address) == false || regexMail.test(contact.email) == false || regexCity.test(contact.city) == false || regexNames.test(contact.firstName || regexNames.test(contact.lastName) == false)){
       alert("Merci de remplir correctement votre formulaire ");
       return false;
     };

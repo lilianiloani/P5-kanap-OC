@@ -47,14 +47,12 @@ const getProduct = async function() {
         
             //check du choix couleur vide 
                 if(canapeColors.value==""){
-                    console.log("choisir une couleur");
                     alert("choisir une couleur");
                     return false;
                 } 
             //check quantité vide 
-                if(quantityValue==0){
-                    console.log("choisir nombre d'article");
-                    alert("choisir nombre d'article(s)!");
+                if(quantityValue<=0){
+                    alert("choisir nombre d'article(s)  supérieur à 0!");
                     return false;
                 } 
             //construction de l'objet produit pour envoi au panier 
@@ -95,7 +93,7 @@ const getProduct = async function() {
                     resetBtnColor();
     
                 });
-                
+
             //fonction de changement du bouton à l'ajout d'un produit dans le panier
             function addedToCartBtnColor(){
                 btn.innerText="produit ajouté";
