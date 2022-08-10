@@ -1,12 +1,12 @@
 
-//récupération du lien hypertexte du produit
+//RECUPERATION DU LIEN HYPERTEXTE DU PRODUIT
 //------------------------------------------
 const url = new URL(window.location.href);
 
 const id = url.searchParams.get("id");
 
-//récuperation d'un produit à partir de son id et construction du DOM(utilisation d'une fonction asynchrone)
-//----------------------------------------------------------------------------------------------------------
+//RÉCUPÉRATION D'UN PRODUIT À PARTIR DE SON ID ET CONSTRUCTION DU DOM(utilisation d'une fonction asynchrone)
+// ---------------------------------------------------------------------------------------------------------
 const getProduct = async function() {
     let  resp = await  fetch(`http://localhost:3000/api/products/${id}`);
     //test de la requête

@@ -1,9 +1,8 @@
-
-//Récupération des produits de l'api
+//RÉCUPÉRATION DES PRODUITS DE L'API
 //-------------------------------------
 
 const getAllProducts=async function(){
-//recupération de liste des produits de l'api
+    //recupération de liste des produits de l'api
     let  resp= await  fetch("http://localhost:3000/api/products");
     if(resp.ok){
         const  products= await resp.json();
@@ -32,12 +31,11 @@ const getAllProducts=async function(){
             p.className="productDescription";
             p.append (element.description);    
         })
+    }else {
+        //gestion d'erreur
+        console.error("erreur");
     }
-        else {
-            //gestion d'erreur
-            console.error("erreur");
-        }
-    }
-    getAllProducts();
+}
+getAllProducts();
     
     
