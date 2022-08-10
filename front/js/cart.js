@@ -1,4 +1,3 @@
-
 //initialisation des totaux de quantité et prix 
 let totalPrice=0;
 let totalQuantity=0;
@@ -83,7 +82,6 @@ function showCart() {
       cartItemQuantityDiv.appendChild(settingQuantityP);
       settingQuantityP.append('Qté:');
       
-      //
       const inputQuantity = document.createElement("input");
       cartItemQuantityDiv.appendChild(inputQuantity);
       inputQuantity.type = "number";
@@ -98,17 +96,15 @@ function showCart() {
 
       //calculer la quantité et le prix
       inputQuantity.addEventListener('change',()=>{
-        console.log(totalQuantity);
         item.quantity=inputQuantity.value;
-        console.log(item.quantity);
         itemTotalPrice=item.quantity*item.price;
+        localStorage.setItem("items", JSON.stringify(cart));
         productPrice.innerText=itemTotalPrice;
         productPrice.append("€");
         cartTotalQuantity();
         cartTotalCost();
-      
       })
-      
+
       // construire supprimer 
       const cartDeleteDiv = document.createElement("div");
       cartItemSettingDiv.appendChild(cartDeleteDiv);
@@ -119,19 +115,17 @@ function showCart() {
       itemDeleteP.className = "deleteItem";
       itemDeleteP.append('Supprimer');
 
-       itemDeleteP.addEventListener('click',()=>{
+      itemDeleteP.addEventListener('click',()=>{
         const cartPreviousLength= cart.length;
         cart=JSON.parse(localStorage.getItem('items'));
          
         updatedCart= [...cart.filter(elt=>elt.id+elt.colors!==item.id+item.colors)];
         if (updatedCart.length < cartPreviousLength) {
-          
             localStorage.setItem("items", JSON.stringify(updatedCart));
             cartParent.removeChild(cartArticle); //permet de faire la mise a jour sans rafraichir la page - single page
             updateCartTotals(updatedCart.length)
         } 
       }) 
-
     })
   }
   
@@ -168,7 +162,6 @@ function showCart() {
       cartContainer.innerHTML="<h1> Le panier est vide <h1>"
     }
   } 
-
   //  formulaire
   //--------------------------------------------------------------
   //construire le DOM de formulaire 
@@ -189,7 +182,6 @@ function showCart() {
 
   // Ecoute et attribution de point(pour sécurité du clic) si ces champs sont ok d'après la regex
   //----------------------------------------------------------------
-
   inputFirstName.addEventListener("input", (e) => {
     //si il est invalide, on affiche un message d'erreur personnalisé
     if (regexNames.test(e.target.value) == false) {
@@ -250,7 +242,6 @@ function showCart() {
         document.getElementById('emailErrorMsg').innerHTML = "Veuillez renseigner votre email."; 
       }
   });
-
   
   // Evenement de validation/d'accés au clic du bouton du formulaire
   //--------------------------------------------------------------
@@ -305,3 +296,4 @@ function showCart() {
   });
 
 showCart();
+

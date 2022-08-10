@@ -39,8 +39,8 @@ const getProduct = async function() {
 
         const quantity=document.getElementById('quantity');
         
-    // Ajout de l'evenement sur le bouton.
-    //--------------------------------------
+        // Ajout de l'evenement sur le bouton.
+        //--------------------------------------
         const btn= document.getElementById('addToCart');
         btn.addEventListener('click', ()=>{
             let quantityValue = parseInt(quantity.value);
@@ -68,7 +68,6 @@ const getProduct = async function() {
                     price: product.price,
                     altTxt:product.altTxt
                 };
-                
             //mise en place des données à stocker dans le localstorage 
             //-------------------------------------------------------
                 let cart= [];
@@ -87,7 +86,7 @@ const getProduct = async function() {
                 }
                 //cart.push(chosenProduct);
                 localStorage.setItem('items', JSON.stringify(oldItems));
-               
+
             //  changement du bouton "ajouter au panier" en "produit ajouté"
             btn.innerText="produit ajouté";
             btn.style.backgroundColor="green";
@@ -97,22 +96,18 @@ const getProduct = async function() {
                 btn.style.color = "white";
                 btn.textContent = "Ajouter au panier";
                 btn.style.backgroundColor="#2c3e50";
-
             }
             canapeColors.addEventListener("change", ()=>{
                 resetBtnColor();
             });
-
             quantity.addEventListener("change", ()=>{
                 resetBtnColor();
 
             });
         });   
-
     }
     else {
         console.error("erreur");
     } 
-
 }
 getProduct() 
