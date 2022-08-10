@@ -94,10 +94,11 @@ function showCart() {
 
       document.getElementById('totalPrice').innerText=totalPrice;
 
-      //calculer la quantité et le prix
+      //mise à jour de la quantité et du prix 
       inputQuantity.addEventListener('change',()=>{
         item.quantity=inputQuantity.value;
         itemTotalPrice=item.quantity*item.price;
+        //mise à jour du localstorage
         localStorage.setItem("items", JSON.stringify(cart));
         productPrice.innerText=itemTotalPrice;
         productPrice.append("€");
@@ -105,7 +106,7 @@ function showCart() {
         cartTotalCost();
       })
 
-      // construire supprimer 
+      // mise en oeuvre de la fonctionnalité de suppression 
       const cartDeleteDiv = document.createElement("div");
       cartItemSettingDiv.appendChild(cartDeleteDiv);
       cartDeleteDiv.className = "cart__item__content__settings__delete";
@@ -122,49 +123,17 @@ function showCart() {
         updatedCart= [...cart.filter(elt=>elt.id+elt.colors!==item.id+item.colors)];
         if (updatedCart.length < cartPreviousLength) {
             localStorage.setItem("items", JSON.stringify(updatedCart));
-            cartParent.removeChild(cartArticle); //permet de faire la mise a jour sans rafraichir la page - single page
+            cartParent.removeChild(cartArticle); //permet la mise à jour de l'affichage
             updateCartTotals(updatedCart.length)
         } 
       }) 
     })
   }
   
-}//showCart
-
-  //fonction pour calculer la quantité totale
-  function cartTotalQuantity() {
-      const itemQuantityElt = document.querySelectorAll('.itemQuantity');
-      let tQuantity = 0;
-      const totalQuantityElt=document.getElementById('totalQuantity')
-      itemQuantityElt.forEach(qte => {
-      tQuantity += parseInt(qte.value); 
-      })
-      return totalQuantityElt.innerText = tQuantity;
-  }
-  //fonction pour calculer le coût total
-  function cartTotalCost() {
-        const itemPriceElt = document.querySelectorAll('.itemTotalPrice');
-        let itTotalPrice = 0;
-        itemPriceElt.forEach(price => {
-        itTotalPrice += parseInt(price.innerText);
-      })
-       document.getElementById('totalPrice').innerText =  itTotalPrice;
-  }
-  //fonction de mise à jour du contenu du panier
-  function updateCartTotals(cartLength){
-    if(cartLength > 0){
-      cartTotalCost();
-      cartTotalQuantity();
-    }else{
-      totalQuantityElt.innerText = 0;
-      totalPriceElt.innerText =0;
-      const cartContainer=document.querySelector('#cartAndFormContainer');
-      cartContainer.innerHTML="<h1> Le panier est vide <h1>"
-    }
-  } 
-  //  formulaire
+}
+  //  LE FORMULAIRE DE COMMANDES
   //--------------------------------------------------------------
-  //construire le DOM de formulaire 
+  //Accès aux éléments  (DOM)de formulaire de commande
   const parentForm = document.querySelector('.cart__order');
   const submitBtn = document.getElementById('order');
     
@@ -173,6 +142,12 @@ function showCart() {
   const inputAddress = document.getElementById('address');
   const inputCity = document.getElementById('city');
   const inputEmail = document.getElementById('email');
+  
+  const firstNameErrorMsgElt = document.getElementById('firstNameErrorMsg');
+  const lastNameErrorMsgElt = document.getElementById('lastNameErrorMsg');
+  const addressErrorMsgElt = document.getElementById('addressErrorMsg');
+  const cityErrorMsgElt = document.getElementById('cityErrorMsg');
+  const emailErrorMsgElt = document.getElementById('emailErrorMsg');
 
   //regex 
   const regexNames = /^[a-z ,.'-]+$/i;
@@ -180,73 +155,34 @@ function showCart() {
   const regexCity = /^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$/;
   const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
 
-  // Ecoute et attribution de point(pour sécurité du clic) si ces champs sont ok d'après la regex
+  //Contrôle des champs du formulaire et geston d'erreurs
   //----------------------------------------------------------------
+  //évènement de gestion controle de la saisie utilisateur
   inputFirstName.addEventListener("input", (e) => {
-    //si il est invalide, on affiche un message d'erreur personnalisé
-    if (regexNames.test(e.target.value) == false) {
-      document.getElementById('firstNameErrorMsg').innerHTML= "format incorrect";
-      inputFirstName.style.backgroundColor = "red";
-      } else { document.getElementById('firstNameErrorMsg').innerHTML = "";
-        inputFirstName.style.backgroundColor = "green";
-      } 
-      if(e.target.value == "" ) {
-        inputFirstName.style.backgroundColor = "white";
-        document.getElementById('firstNameErrorMsg').innerHTML = "champ vide"; 
-      }
+    //appel de la fonction du contrôle de la saisie utilisateur
+    formInputsCheck(firstNameErrorMsgElt,regexNames, e.target.value, inputFirstName); 
+
   });
   inputLastName.addEventListener("input", (e) => {
-    if (regexNames.test(e.target.value) == false) { 
-      document.getElementById('lastNameErrorMsg').innerHTML = "format incorrect";
-      inputLastName.style.backgroundColor = "red";
-      } else { document.getElementById('lastNameErrorMsg').innerHTML = ""
-        inputLastName.style.backgroundColor = "green";
-      }
-      if(e.target.value == "" ) {
-        inputLastName.style.backgroundColor = "white";
-        document.getElementById('lastNameErrorMsg').innerHTML = "champ vide"; 
-      }
+    formInputsCheck(lastNameErrorMsgElt,regexNames, e.target.value, inputLastName);
+    
   });
   inputAddress.addEventListener("input", (e) => {
-    if (regexAddress.test(e.target.value) == false) {
-      document.getElementById('addressErrorMsg').innerHTML = "format incorrect";
-      inputAddress.style.backgroundColor = "red";
-      } else { document.getElementById('addressErrorMsg').innerHTML = "" ;
-        inputAddress.style.backgroundColor = "green";
-      }
-      if(e.target.value == "" ) {
-        inputAddress.style.backgroundColor = "white";
-        document.getElementById('addressErrorMsg').innerHTML = "champ vide"; 
-      }
+    formInputsCheck(addressErrorMsgElt,regexAddress, e.target.value, inputAddress);
+    
   });
   inputCity.addEventListener("input", (e) => {
-    if (regexCity.test(e.target.value) == false) {
-      document.getElementById('cityErrorMsg').innerHTML = "format incorrect";
-      inputCity.style.backgroundColor = "red";
-      } else { document.getElementById('cityErrorMsg').innerHTML = "" ;
-        inputCity.style.backgroundColor = "green";
-      }
-      if(e.target.value == "" ) {
-        inputCity.style.backgroundColor = "white";
-        document.getElementById('cityErrorMsg').innerHTML = "champ vide"; 
-      }
+    formInputsCheck(cityErrorMsgElt,regexCity, e.target.value, inputCity);
+   
   });
   inputEmail.addEventListener("input", (e) => {
-    if (regexMail.test(e.target.value) == false) {
-        document.getElementById('emailErrorMsg').innerHTML = "Format email pas encore conforme"; 
-      } else { document.getElementById('emailErrorMsg').innerHTML = "";
-        inputEmail.style.backgroundColor = "green";
-      }
-      if(e.target.value == "" ) {
-        inputEmail.style.backgroundColor = "white";
-        document.getElementById('emailErrorMsg').innerHTML = "Veuillez renseigner votre email."; 
-      }
+    formInputsCheck(emailErrorMsgElt,regexMail, e.target.value, inputEmail); 
+    
   });
+
   
-  // Evenement de validation/d'accés au clic du bouton du formulaire
-  //--------------------------------------------------------------
   submitBtn.addEventListener("click", (e) => {
-    e.preventDefault() //empeche le refresh de la page quand on clique
+    e.preventDefault() 
 
     const contact = { 
     firstName: inputFirstName.value,
@@ -255,7 +191,7 @@ function showCart() {
     city: inputCity.value,
     email: inputEmail.value,
     };
-    //test si un champ est vide, ne pas générer de commande
+    //check des champs vides avant validation de la commande
     if (inputFirstName.value == "" || inputLastName.value == "" ||
     inputAddress.value == "" || inputCity.value == "" || inputEmail.value == "") {
       alert("Champ(s) manquant(s)");
@@ -275,10 +211,10 @@ function showCart() {
     products.push(item.id);
     });
 
-    // le paquet que l'on veut envoyer
+    // les  données  que l'on veut envoyer
     const orderData = { contact, products }; 
 
-    // envoi à la ressource api
+    // envoi des ressources de commande via la méthode POST 
     fetch((`http://localhost:3000/api/products/order`), {
       method: 'POST',
       headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -294,6 +230,51 @@ function showCart() {
       alert(error);
       });
   });
+
+  //fonction pour calculer la quantité totale
+  function cartTotalQuantity() {
+    const itemQuantityElt = document.querySelectorAll('.itemQuantity');
+    let tQuantity = 0;
+    const totalQuantityElt=document.getElementById('totalQuantity')
+    itemQuantityElt.forEach(qte => {
+    tQuantity += parseInt(qte.value); 
+    })
+    return totalQuantityElt.innerText = tQuantity;
+  }
+  //fonction pour calculer le coût total
+  function cartTotalCost() {
+        const itemPriceElt = document.querySelectorAll('.itemTotalPrice');
+        let itTotalPrice = 0;
+        itemPriceElt.forEach(price => {
+        itTotalPrice += parseInt(price.innerText);
+      })
+      document.getElementById('totalPrice').innerText =  itTotalPrice;
+  }
+  //fonction de mise à jour du contenu du panier
+  function updateCartTotals(cartLength){
+    if(cartLength > 0){
+      cartTotalCost();
+      cartTotalQuantity();
+    }else{
+      totalQuantityElt.innerText = 0;
+      totalPriceElt.innerText =0;
+      const cartContainer=document.querySelector('#cartAndFormContainer');
+      cartContainer.innerHTML="<h1> Le panier est vide <h1>"
+    }
+  } 
+  //fonction de contrôle de la saisie utilisateur sur les champs de formulaire 
+  function formInputsCheck(errorMessageElt, regex, inputValue, inputTypeElt){
+    if (regex.test(inputValue) == false){
+      errorMessageElt.innerHTML= "format incorrect";
+      inputTypeElt.style.backgroundColor = "red";
+    } else {errorMessageElt.innerHTML = "";
+        inputTypeElt.style.backgroundColor = "green";
+      } 
+    if(inputValue == "" ) {
+      inputTypeElt.style.backgroundColor = "white";
+      errorMessageElt.innerHTML = "champ vide"; 
+    }
+  }
 
 showCart();
 
