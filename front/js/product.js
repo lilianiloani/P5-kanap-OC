@@ -70,40 +70,44 @@ const getProduct = async function() {
                 };
             //mise en place des données à stocker dans le localstorage 
             //-------------------------------------------------------
-                let cart= [];
-                console.log(cart);
+                //check du contenu du localstorage et attribution à oldItems
                 let oldItems = JSON.parse(localStorage.getItem('items')) || [];
 
                 // si le localstorage n'est pas vide
                 let oldItem = oldItems.find(el => el.id == chosenProduct.id 
                 && el.colors == chosenProduct.colors);
                 if (oldItem) {
-
                 // Incrémentation de la quantité si un produit identique existe dans le localstorage
                 oldItem.quantity += quantityValue;
                 } else {
                     oldItems.push(chosenProduct);
                 }
-                //cart.push(chosenProduct);
+                //mise à jour du localstorage
                 localStorage.setItem('items', JSON.stringify(oldItems));
 
             //  changement du bouton "ajouter au panier" en "produit ajouté"
-            btn.innerText="produit ajouté";
-            btn.style.backgroundColor="green";
-
+                addedToCartBtnColor()
+            
+                canapeColors.addEventListener("change", ()=>{
+                    resetBtnColor();
+                });
+                quantity.addEventListener("change", ()=>{
+                    resetBtnColor();
+    
+                });
+                
+            //fonction de changement du bouton à l'ajout d'un produit dans le panier
+            function addedToCartBtnColor(){
+                btn.innerText="produit ajouté";
+                btn.style.backgroundColor="green";
+            }
             //fonction de réinitialisation des couleurs
             function resetBtnColor(){
                 btn.style.color = "white";
                 btn.textContent = "Ajouter au panier";
                 btn.style.backgroundColor="#2c3e50";
             }
-            canapeColors.addEventListener("change", ()=>{
-                resetBtnColor();
-            });
-            quantity.addEventListener("change", ()=>{
-                resetBtnColor();
-
-            });
+            
         });   
     }
     else {

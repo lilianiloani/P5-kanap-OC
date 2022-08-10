@@ -1,3 +1,4 @@
+
 //initialisation des totaux de quantité et prix 
 let totalPrice=0;
 let totalQuantity=0;
@@ -180,7 +181,6 @@ function showCart() {
     
   });
 
-  
   submitBtn.addEventListener("click", (e) => {
     e.preventDefault() 
 
@@ -198,7 +198,7 @@ function showCart() {
       return false;
     };
     if (regexAddress.test(contact.address) == false || regexMail.test(contact.email) == false || regexCity.test(contact.city) == false || regexNames.test(contact.firstName || regexNames.test(contact.lastName) == false) == false) {
-      alert("Merci de remplir correctement le formulaire pour valider votre commande");
+      alert("Merci de remplir correctement votre formulaire ");
       return false;
     };
 
